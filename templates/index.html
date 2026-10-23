@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+    <div class="container hero-inner">
+        <p class="hero-tag">Home cooking, shared</p>
+        <h1>Discover &amp; share recipes you'll <span>love to cook</span></h1>
+        <p class="hero-text">
+            RecipeShare is a friendly place to save your favourite dishes,
+            find new ideas and learn from other home cooks.
+        </p>
+
+        <!-- Search bar: sends ?q=... to the recipes page -->
+        <form class="hero-search" action="{{ url_for('recipes') }}" method="get">
+            <input type="search" name="q" placeholder="Search for pasta, curry, cake..." aria-label="Search recipes">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</section>
+
+<!-- ===================== CATEGORIES ===================== -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Browse by category</h2>
+            <p>Pick a cuisine or meal type to get started.</p>
+        </div>
+
+        <div class="category-grid">
+            {% for category in categories %}
+                <a class="category-card" href="{{ url_for('recipes', category=category) }}">
+                    <span class="category-letter">{{ category[0] }}</span>
+                    <span>{{ category }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===================== LATEST RECIPES ===================== -->
+<section class="section section-cream">
+    <div class="container">
+        <div class="section-header">
+            <h2>Latest recipes</h2>
+            <p>Freshly added by our community.</p>
+        </div>
+
+        {% if latest_recipes %}
+            <div class="recipe-grid">
+                {% for recipe in latest_recipes %}
+                    {% include "_recipe_card.html" %}
+                {% endfor %}
+            </div>
+            <div class="center">
+                <a href="{{ url_for('recipes') }}" class="btn btn-outline">View all recipes</a>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No recipes yet</h3>
+                <p>Be the first to share a recipe with the community!</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ===================== CALL TO ACTION ===================== -->
+<section class="section">
+    <div class="container">
+        <div class="cta">
+            <h2>Have a recipe worth sharing?</h2>
+            {% if current_user %}
+                <p>Share your favourite dish with the community in just a few minutes.</p>
+                <a href="{{ url_for('add_recipe') }}" class="btn btn-light">Add a recipe</a>
+            {% else %}
+                <p>Join RecipeShare to post your recipes, save favourites and review dishes.</p>
+                <a href="{{ url_for('register') }}" class="btn btn-light">Create a free account</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
